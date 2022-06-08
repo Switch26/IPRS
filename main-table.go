@@ -20,9 +20,8 @@ var skeleLinkGood = "https://skeles.s3.amazonaws.com/mp4/10000053192394920916220
 var skeleLinkBad = "https://skeles.s3.amazonaws.com/mp4/10000053192394920916220936838962584446626882963584669009033959449468388204873.mp4"
 
 func main() {
-	fmt.Println("main called")
+	//fmt.Println("main called")
 	pin(skeleLinkGood)
-	//createCID()
 }
 
 func pin(link string) {
@@ -32,13 +31,14 @@ func pin(link string) {
 			fmt.Println("error: ", r)
 		}
 	}()
-	downloadFile(link, "testination.mp4")
-
+	data := downloadFile(link, "testination.mp4")
+	CIDstring := createCID(data)
+	fmt.Println("Created CID: ", CIDstring)
 	//add to myTable
 	//delete downloaded file
 }
 
-func downloadFile(link, destFileName string) {
+func downloadFile(link, destFileName string) []byte {
 	// checking for errors in download
 	resp, err := http.Get(link)
 	if err != nil {
@@ -57,7 +57,7 @@ func downloadFile(link, destFileName string) {
 		panic(fmt.Sprintf("%v", err)) // can't copy from buffer
 	}
 	fmt.Println("copied data:", n)
-	createCID(myBuffer.Bytes())
+	return myBuffer.Bytes()
 
 	// save to a file
 	//out, err := os.Create(destFileName)
@@ -67,7 +67,7 @@ func downloadFile(link, destFileName string) {
 	//defer out.Close()
 }
 
-func createCID(data []byte) {
+func createCID(data []byte) string {
 	//println(uint64(mc.Raw))
 	pref := cid.Prefix{
 		Version:  1,
@@ -80,6 +80,5 @@ func createCID(data []byte) {
 	if err != nil {
 		println("error: %", err)
 	}
-
-	fmt.Println("Created CID: ", c)
+	return c.String()
 }
