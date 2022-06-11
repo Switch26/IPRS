@@ -34,6 +34,7 @@ func pin(link string) {
 	data := downloadFile(link, "testination.mp4")
 	CIDstring := createCID(data)
 	fmt.Println("Created CID: ", CIDstring)
+
 	//add to myTable
 	//delete downloaded file
 }
