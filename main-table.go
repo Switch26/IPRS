@@ -21,7 +21,8 @@ var skeleLinkBad = "https://skeles.s3.amazonaws.com/mp4/100000531923949209162209
 
 func main() {
 	//fmt.Println("main called")
-	pin(skeleLinkGood)
+	//pin(skeleLinkGood)
+	connectDatabase()
 }
 
 func pin(link string) {
