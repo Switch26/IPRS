@@ -42,9 +42,7 @@ func pin(link string) {
 func downloadFile(link, destFileName string) []byte {
 	// checking for errors in download
 	resp, err := http.Get(link)
-	if err != nil {
-		panic(fmt.Sprintf("%v", err)) // no internet kinda deal
-	}
+	CheckError(err)
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		panic(fmt.Sprintf("%v", resp)) // broken link
@@ -54,9 +52,7 @@ func downloadFile(link, destFileName string) []byte {
 	// by now we have valid data
 	var myBuffer bytes.Buffer
 	n, err := io.Copy(&myBuffer, resp.Body)
-	if err != nil {
-		panic(fmt.Sprintf("%v", err)) // can't copy from buffer
-	}
+	CheckError(err)
 	fmt.Println("copied data:", n)
 	return myBuffer.Bytes()
 
@@ -78,14 +74,12 @@ func createCID(data []byte) string {
 	}
 
 	c, err := pref.Sum([]byte(data))
-	if err != nil {
-		println("error: %", err)
-	}
+	CheckError(err)
 	return c.String()
 }
 
 func CheckError(err error) {
 	if err != nil {
-		panic(err)
+		panic(fmt.Sprintf("%v", err))
 	}
 }
