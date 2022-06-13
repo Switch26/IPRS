@@ -22,7 +22,6 @@ var skeleLinkBad = "https://skeles.s3.amazonaws.com/mp4/100000531923949209162209
 func main() {
 	//fmt.Println("main called")
 	//pin(skeleLinkGood)
-	connectDatabase()
 }
 
 func pin(link string) {
@@ -83,4 +82,10 @@ func createCID(data []byte) string {
 		println("error: %", err)
 	}
 	return c.String()
+}
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
