@@ -22,6 +22,7 @@ var skeleLinkBad = "https://skeles.s3.amazonaws.com/mp4/100000531923949209162209
 func main() {
 	//fmt.Println("main called")
 	//pin(skeleLinkGood)
+	createDB()
 }
 
 func pin(link string) {
@@ -31,7 +32,7 @@ func pin(link string) {
 			fmt.Println("error: ", r)
 		}
 	}()
-	data := downloadFile(link, "testination.mp4")
+	data := downloadFile(link, "destination.mp4")
 	CIDstring := createCID(data)
 	fmt.Println("Created CID: ", CIDstring)
 
