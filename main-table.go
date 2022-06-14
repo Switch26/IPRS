@@ -22,7 +22,8 @@ var skeleLinkBad = "https://skeles.s3.amazonaws.com/mp4/100000531923949209162209
 func main() {
 	//fmt.Println("main called")
 	//pin(skeleLinkGood)
-	createDB()
+	result, err := insertRow("myCIDtest", "someURL")
+	fmt.Println("Did we insert new row?", result, err)
 }
 
 func pin(link string) {
