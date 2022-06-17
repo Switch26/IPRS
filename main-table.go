@@ -13,32 +13,32 @@ import (
 // table
 // API to extend table (os.Args)
 // copy table to other node
-//cid "github.com/ipfs/go-cid"
 
-var myTable map[string][]string // map (aka dictionary) of strings array (slice)
-var skeleLinkGood = "https://skeles.s3.amazonaws.com/mp4/100000531923949209162209368389625844466268829635846690090339594494683882048735.mp4"
-var skeleLinkBad = "https://skeles.s3.amazonaws.com/mp4/10000053192394920916220936838962584446626882963584669009033959449468388204873.mp4"
+var skeleLinkGood = "https://ipfs.io/ipfs/QmV6aq5mm82YtoDGinPwDVrNWAyNegaJJYtW7kj1NdZpdB"
 
 func main() {
-	//fmt.Println("main called")
-	//pin(skeleLinkGood)
-	result, err := insertRow("myCIDtest", "someURL")
-	fmt.Println("Did we insert new row?", result, err)
+	newCID, err := pin(skeleLinkGood)
+	println("result: ", newCID, err)
+
 }
 
-func pin(link string) {
-	//download link
+func pin(link string) (string, error) {
+	// just handling panic
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("error: ", r)
 		}
 	}()
+
 	data := downloadFile(link, "destination.mp4")
 	CIDstring := createCID(data)
 	fmt.Println("Created CID: ", CIDstring)
-
-	//add to myTable
-	//delete downloaded file
+	_, err := insertRow(CIDstring, link)
+	if err == nil {
+		return CIDstring, nil
+	} else {
+		return "", err
+	}
 }
 
 func downloadFile(link, destFileName string) []byte {
