@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
 	"net"
+	"time"
 )
 
 func sendEcho(message string) {
@@ -34,4 +36,28 @@ func sendData(message, address string) {
 	resp, err := conn.Write([]byte(message))
 	CheckError(err)
 	fmt.Println("resp:", resp)
+}
+
+//every node should be constantly listening
+func startListening(port string) {
+	listen, err := net.Listen("tcp", port) // opens port
+	CheckError(err)
+	defer listen.Close()
+
+	for {
+		conn, err := listen.Accept() // should it be in a loop?
+		CheckError(err)
+		go handleIncomingConnection(conn)
+	}
+}
+
+func handleIncomingConnection(conn net.Conn) {
+	conn.SetReadDeadline(time.Now().Add(3 * time.Minute))
+	defer conn.Close()
+
+	for {
+		netData, err := bufio.NewReader(conn).ReadString('\n')
+		CheckError(err)
+		fmt.Println("-> ", string(netData))
+	}
 }
