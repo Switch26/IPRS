@@ -40,7 +40,8 @@ func sendData(message, address string) {
 
 //every node should be constantly listening
 func startListening(port string) {
-	listen, err := net.Listen("tcp", port) // opens port
+	PORT := ":" + port
+	listen, err := net.Listen("tcp", PORT) // opens port
 	CheckError(err)
 	defer listen.Close()
 
