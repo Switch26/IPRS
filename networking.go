@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"time"
 )
 
 func sendEcho(message string) {
@@ -32,10 +31,7 @@ func sendData(message, address string) {
 	conn, err := net.Dial("tcp", address)
 	CheckError(err)
 	defer conn.Close()
-
-	resp, err := conn.Write([]byte(message))
-	CheckError(err)
-	fmt.Println("resp:", resp)
+	fmt.Fprintf(conn, message) // writing to connection
 }
 
 //every node should be constantly listening
@@ -43,22 +39,40 @@ func startListening(port string) {
 	PORT := ":" + port
 	listen, err := net.Listen("tcp", PORT) // opens port
 	CheckError(err)
-	defer listen.Close()
+	//defer listen.Close()
 
-	for {
-		conn, err := listen.Accept() // should it be in a loop?
-		CheckError(err)
-		go handleIncomingConnection(conn)
-	}
+	//for {
+	//	conn, err := listen.Accept() // should it be in a loop?
+	//	CheckError(err)
+	//	//fmt.Println("listen.Accept")
+	//	go handleIncomingConnection(conn)
+	//}
+	go startAcceptingConnections(listen)
 }
 
 func handleIncomingConnection(conn net.Conn) {
-	conn.SetReadDeadline(time.Now().Add(3 * time.Minute))
-	defer conn.Close()
-
+	//for {
+	//	netData, err := bufio.NewReader(conn).ReadString('\n')
+	//	fmt.Println("-> ", string(netData))
+	//	CheckError(err)
+	//}
+	r := bufio.NewReader(conn)
 	for {
-		netData, err := bufio.NewReader(conn).ReadString('\n')
-		CheckError(err)
-		fmt.Println("-> ", string(netData))
+		line, err := r.ReadBytes(byte('\n'))
+		switch err {
+		case nil:
+			break
+		case io.EOF:
+		default:
+			fmt.Println("ERROR: ", err)
+		}
+		fmt.Println("->", string(line))
 	}
+}
+
+func startAcceptingConnections(listener net.Listener) {
+	conn, err := listener.Accept() // should it be in a loop?
+	CheckError(err)
+	//fmt.Println("listen.Accept")
+	go handleIncomingConnection(conn)
 }
