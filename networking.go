@@ -70,11 +70,11 @@ func handleIncomingConnection(conn net.Conn) {
 		line, err := r.ReadBytes(byte('\n'))
 		switch err {
 		case nil:
-			break
+			fmt.Println("->", string(line))
 		case io.EOF:
 		default:
 			fmt.Println("ERROR: ", err)
 		}
-		fmt.Println("->", string(line))
+
 	}
 }
