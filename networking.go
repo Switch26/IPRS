@@ -47,7 +47,7 @@ func startListening(port string) {
 	//	//fmt.Println("listen.Accept")
 	//	go handleIncomingConnection(conn)
 	//}
-	startAcceptingConnections(listen)
+	go startAcceptingConnections(listen)
 }
 
 func startAcceptingConnections(listener net.Listener) {
@@ -60,21 +60,21 @@ func startAcceptingConnections(listener net.Listener) {
 }
 
 func handleIncomingConnection(conn net.Conn) {
-	for {
-		netData, err := bufio.NewReader(conn).ReadString('\n')
-		fmt.Println("-> ", string(netData))
-		CheckError(err)
-	}
-	//r := bufio.NewReader(conn)
 	//for {
-	//	line, err := r.ReadBytes(byte('\n'))
-	//	switch err {
-	//	case nil:
-	//		break
-	//	case io.EOF:
-	//	default:
-	//		fmt.Println("ERROR: ", err)
-	//	}
-	//	fmt.Println("->", string(line))
+	//	netData, err := bufio.NewReader(conn).ReadString('\n')
+	//	fmt.Println("-> ", string(netData))
+	//	CheckError(err)
 	//}
+	r := bufio.NewReader(conn)
+	for {
+		line, err := r.ReadBytes(byte('\n'))
+		switch err {
+		case nil:
+			break
+		case io.EOF:
+		default:
+			fmt.Println("ERROR: ", err)
+		}
+		fmt.Println("->", string(line))
+	}
 }
