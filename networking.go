@@ -47,32 +47,34 @@ func startListening(port string) {
 	//	//fmt.Println("listen.Accept")
 	//	go handleIncomingConnection(conn)
 	//}
-	go startAcceptingConnections(listen)
-}
-
-func handleIncomingConnection(conn net.Conn) {
-	//for {
-	//	netData, err := bufio.NewReader(conn).ReadString('\n')
-	//	fmt.Println("-> ", string(netData))
-	//	CheckError(err)
-	//}
-	r := bufio.NewReader(conn)
-	for {
-		line, err := r.ReadBytes(byte('\n'))
-		switch err {
-		case nil:
-			break
-		case io.EOF:
-		default:
-			fmt.Println("ERROR: ", err)
-		}
-		fmt.Println("->", string(line))
-	}
+	startAcceptingConnections(listen)
 }
 
 func startAcceptingConnections(listener net.Listener) {
-	conn, err := listener.Accept() // should it be in a loop?
-	CheckError(err)
-	//fmt.Println("listen.Accept")
-	go handleIncomingConnection(conn)
+	for {
+		conn, err := listener.Accept() // should it be in a loop?
+		CheckError(err)
+		fmt.Println("listen.Accept")
+		go handleIncomingConnection(conn)
+	}
+}
+
+func handleIncomingConnection(conn net.Conn) {
+	for {
+		netData, err := bufio.NewReader(conn).ReadString('\n')
+		fmt.Println("-> ", string(netData))
+		CheckError(err)
+	}
+	//r := bufio.NewReader(conn)
+	//for {
+	//	line, err := r.ReadBytes(byte('\n'))
+	//	switch err {
+	//	case nil:
+	//		break
+	//	case io.EOF:
+	//	default:
+	//		fmt.Println("ERROR: ", err)
+	//	}
+	//	fmt.Println("->", string(line))
+	//}
 }

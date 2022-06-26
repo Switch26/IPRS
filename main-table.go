@@ -17,6 +17,11 @@ var skeleLinkGood = "https://ipfs.io/ipfs/QmV6aq5mm82YtoDGinPwDVrNWAyNegaJJYtW7k
 
 func main() {
 	println("main called")
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("error: ", r)
+		}
+	}()
 	//newCID, err := pin(skeleLinkGood)
 	//println("result: ", newCID, err)
 	//sendEcho("yo!")
