@@ -25,10 +25,10 @@ func main() {
 	//newCID, err := pin(skeleLinkGood)
 	//println("result: ", newCID, err)
 	//sendEcho("yo!")
-	//startListening("1234")
+	startListening("1234")
 	//time.Sleep(3)
 	//fmt.Println("sending data")
-	sendData("yoyoyo!\n", "3.227.13.24:1234")
+	//sendData("yoyoyo!\n", "3.227.13.24:1234")
 }
 
 func pin(link string) (string, error) {
