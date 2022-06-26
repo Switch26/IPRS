@@ -47,7 +47,7 @@ func startListening(port string) {
 	//	//fmt.Println("listen.Accept")
 	//	go handleIncomingConnection(conn)
 	//}
-	go startAcceptingConnections(listen)
+	startAcceptingConnections(listen)
 }
 
 func startAcceptingConnections(listener net.Listener) {
