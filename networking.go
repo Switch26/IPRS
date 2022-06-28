@@ -20,12 +20,13 @@ func startListening(port string) {
 	listen, err := net.Listen("tcp", PORT) // opens port
 	CheckError(err)
 	//defer listen.Close()
-	startAcceptingConnections(listen)
+	go startAcceptingConnections(listen)
 }
 
 func startAcceptingConnections(listener net.Listener) {
+	//should be in a loop because each batch (ie sendData) is a new Accept & Read
 	for {
-		conn, err := listener.Accept() // should it be in a loop?
+		conn, err := listener.Accept()
 		CheckError(err)
 		fmt.Println("listen.Accept")
 		go handleIncomingConnection(conn)
@@ -33,11 +34,6 @@ func startAcceptingConnections(listener net.Listener) {
 }
 
 func handleIncomingConnection(conn net.Conn) {
-	//for {
-	//	netData, err := bufio.NewReader(conn).ReadString('\n')
-	//	fmt.Println("-> ", string(netData))
-	//	CheckError(err)
-	//}
 	r := bufio.NewReader(conn)
 	for {
 		line, err := r.ReadBytes(byte('\n'))
@@ -48,6 +44,5 @@ func handleIncomingConnection(conn net.Conn) {
 		default:
 			fmt.Println("ERROR: ", err)
 		}
-
 	}
 }

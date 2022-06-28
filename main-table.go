@@ -8,6 +8,7 @@ import (
 	mh "github.com/multiformats/go-multihash"
 	"io"
 	"net/http"
+	"time"
 )
 
 // API to extend table (os.Args)
@@ -22,14 +23,26 @@ func main() {
 			fmt.Println("error: ", r)
 		}
 	}()
+
+	done := make(chan bool)
+	go forever()
+
 	//newCID, err := pin(skeleLinkGood)
 	//println("result: ", newCID, err)
 	startListening("1234")
-	//time.Sleep(3)
-	//fmt.Println("sending data")
+	fmt.Println("sending data")
 	//sendData("yoyoyo!\n", "3.227.13.24:1234")
 	//sendData("hehehehehe!\n", "3.227.13.24:1234")
 	//sendData("Line1\n Line2\n", "3.227.13.24:1234")
+
+	<-done
+}
+
+func forever() {
+	for {
+		fmt.Printf("%v+\n", time.Now())
+		time.Sleep(time.Second)
+	}
 }
 
 func pin(link string) (string, error) {
