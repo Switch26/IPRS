@@ -31,9 +31,9 @@ func main() {
 	//println("result: ", newCID, err)
 	startListening("1234")
 	fmt.Println("sending data")
-	//sendData("yoyoyo!\n", "3.227.13.24:1234")
-	//sendData("hehehehehe!\n", "3.227.13.24:1234")
-	//sendData("Line1\n Line2\n", "3.227.13.24:1234")
+	sendData("yoyoyo!\n", "3.227.13.24:1234")
+	sendData("hehehehehe!\n", "3.227.13.24:1234")
+	sendData("Line1\n Line2\n", "3.227.13.24:1234")
 
 	<-done
 }
