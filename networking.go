@@ -14,22 +14,36 @@ func sendData(message, address string) {
 	fmt.Fprintf(conn, message) // writing to connection
 }
 
-//every node should be constantly listening
-func startListening(port string) {
-	PORT := ":" + port
-	listen, err := net.Listen("tcp", PORT) // opens port
-	CheckError(err)
-	//defer listen.Close()
-	go startAcceptingConnections(listen)
+func startAcceptingConnecitons() {
+	// this error checks for all panic error throws from methods below
+	// this way I don't have to check error on every method
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("startAcceptingConnections() error: ", r)
+		}
+	}()
+
+	myListener := openListener(1234)
+	go runAcceptConnectionsLoop(myListener)
+
 }
 
-func startAcceptingConnections(listener net.Listener) {
+//every node should be constantly listening
+func openListener(port int) net.Listener {
+	PORT := ":" + string(port)
+	listener, err := net.Listen("tcp", PORT) // opens port
+	CheckError(err)
+	return listener
+	//defer listen.Close()
+}
+
+func runAcceptConnectionsLoop(listener net.Listener) {
 	//should be in a loop because each batch (ie sendData) is a new Accept & Read
 	for {
 		conn, err := listener.Accept()
 		CheckError(err)
-		fmt.Println("listen.Accept")
-		go handleIncomingConnection(conn)
+		//fmt.Println("listen.Accept")
+		handleIncomingConnection(conn)
 	}
 }
 
